@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database with pgvector
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: portfolio-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: portfolio_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - portfolio-network
+
+  # Redis for caching and queues
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - portfolio-network
+
+  # Node.js Backend
+  backend:
+    build: ./portfolio-backend
+    container_name: portfolio-backend
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/portfolio_db
+      REDIS_URL: redis://redis:6379
+      CLIP_SERVICE_URL: http://clip-service:8000
+      JWT_SECRET: portfolio-secret-key-2024
+      FRONTEND_URL: http://localhost:5174
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./portfolio-backend:/app
+      - /app/node_modules
+    networks:
+      - portfolio-network
+    command: npm run dev
+
+  # Python CLIP Service
+  clip-service:
+    build: ./portfolio-clip-service
+    container_name: portfolio-clip
+    ports:
+      - "8000:8000"
+    environment:
+      MODEL_NAME: openai/clip-vit-base-patch32
+      DEVICE: cpu
+      REDIS_HOST: redis
+      CORS_ORIGINS: http://localhost:3001,http://localhost:5174
+    depends_on:
+      - redis
+    volumes:
+      - ./portfolio-clip-service:/app
+    networks:
+      - portfolio-network
+
+  # React Frontend
+  frontend:
+    build: ./portfolio-frontend
+    container_name: portfolio-frontend
+    ports:
+      - "5174:5174"
+    environment:
+      VITE_API_URL: http://localhost:3001
+    volumes:
+      - ./portfolio-frontend:/app
+      - /app/node_modules
+    networks:
+      - portfolio-network
+    command: npm run dev -- --host 0.0.0.0 --port 5174
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

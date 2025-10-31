@@ -1,0 +1,9 @@
+[submodule "portfolio-backend"]
+	path = portfolio-backend
+	url = git@github.com:abarnes6/portfolio-backend.git
+[submodule "portfolio-frontend"]
+	path = portfolio-frontend
+	url = git@github.com:abarnes6/portfolio-frontend.git
+[submodule "portfolio-clip-service"]
+	path = portfolio-clip-service
+	url = git@github.com:abarnes6/portfolio-clip-service.git
