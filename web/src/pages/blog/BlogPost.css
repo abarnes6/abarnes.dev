@@ -1,0 +1,240 @@
+/* ============================================
+   BLOG POST - ADMIN CONTROLS
+   ============================================ */
+
+.post-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.post-admin-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.post-action-btn {
+  padding: var(--space-xs) var(--space-sm);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.post-action-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.post-action-btn--delete {
+  color: var(--text-muted);
+}
+
+.post-action-btn--delete:hover {
+  border-color: var(--error);
+  color: var(--error);
+  background: rgba(255, 51, 51, 0.1);
+}
+
+/* ============================================
+   MESSAGES
+   ============================================ */
+
+.post-message {
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: 0.85rem;
+  animation: messageSlide 0.2s ease;
+}
+
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.post-message--success {
+  background: var(--accent-glow);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.post-message--error {
+  background: rgba(255, 51, 51, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+/* ============================================
+   POST EDITOR
+   ============================================ */
+
+.post-editor {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  animation: editorSlide 0.3s ease;
+}
+
+@keyframes editorSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-editor::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.post-editor .editor-header {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-editor .editor-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}
+
+.post-editor .editor-form {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.post-editor .editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.post-editor .editor-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.post-editor .label-hint {
+  color: var(--accent);
+  opacity: 0.6;
+  text-transform: lowercase;
+  margin-left: var(--space-sm);
+}
+
+.post-editor .editor-input,
+.post-editor .editor-textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  transition: all var(--transition-fast);
+  resize: vertical;
+}
+
+.post-editor .editor-input:focus,
+.post-editor .editor-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.post-editor .editor-textarea--small {
+  min-height: 60px;
+}
+
+.post-editor .editor-textarea--large {
+  min-height: 400px;
+}
+
+.post-editor .editor-actions {
+  display: flex;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
+.post-editor .editor-cancel {
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.post-editor .editor-cancel:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+.post-editor .editor-submit {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.post-editor .editor-submit:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.post-editor .editor-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .post-nav-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .post-editor .editor-actions {
+    flex-direction: column;
+  }
+
+  .post-editor .editor-cancel {
+    order: 2;
+  }
+}
